@@ -11,4 +11,8 @@ public class MapUtil {
         return JSON.parseObject(JSON.toJSONString(obj), new TypeReference<Map<String, String>>(){});
     }
 
+    public static <T> T  mapToObject(Map<String, String> map, Class<T> clazz) {
+        return JSON.parseObject(JSON.toJSONString(map), clazz);
+    }
+
 }

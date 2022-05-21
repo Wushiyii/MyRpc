@@ -34,9 +34,6 @@ public class ServerBooster implements ApplicationListener<ContextRefreshedEvent>
             //注册接口到注册中心
             registerAllMethod(context);
 
-            //订阅注册中心
-            subscribe(context);
-
             //启动服务器
             startServer(context);
         }
@@ -60,17 +57,6 @@ public class ServerBooster implements ApplicationListener<ContextRefreshedEvent>
         log.info("registerAllMethod stop, spend time={}", stopwatch.stop().elapsed());
     }
 
-
-    private void subscribe(ApplicationContext context) {
-        log.info("subscribe start ");
-        Stopwatch stopwatch = Stopwatch.createStarted();
-
-
-
-
-        log.info("subscribe stop, spend time={}", stopwatch.stop().elapsed());
-
-    }
 
     private void startServer(ApplicationContext context) {
 

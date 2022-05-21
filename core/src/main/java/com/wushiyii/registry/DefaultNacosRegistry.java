@@ -3,13 +3,20 @@ package com.wushiyii.registry;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingFactory;
 import com.alibaba.nacos.api.naming.NamingService;
+import com.alibaba.nacos.api.naming.listener.NamingEvent;
 import com.alibaba.nacos.api.naming.pojo.Instance;
+import com.wushiyii.cache.NodeCache;
 import com.wushiyii.model.MethodInfo;
 import com.wushiyii.model.NodeInfo;
 import com.wushiyii.model.RpcConfig;
 import com.wushiyii.util.MapUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * 服务发现：默认实现为Nacos
@@ -43,5 +50,17 @@ public class DefaultNacosRegistry implements Registry {
         instance.setMetadata(MapUtil.objectToMap(nodeInfo));
 
         namingService.registerInstance(nodeInfo.getMethodName(), instance);
+
+        namingService.subscribe(nodeInfo.getMethodName(), event -> {
+            if (event instanceof NamingEvent) {
+                List<Instance> instances = ((NamingEvent) event).getInstances();
+                List<NodeInfo> nodeList = Optional.ofNullable(instances).orElse(new ArrayList<>())
+                        .stream()
+                        .map(ins -> MapUtil.mapToObject(ins.getMetadata(), NodeInfo.class))
+                        .collect(Collectors.toList());
+                NodeCache.putNodeList(nodeInfo.getMethodName(), nodeList);
+            }
+
+        });
     }
 }

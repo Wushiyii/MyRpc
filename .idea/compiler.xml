@@ -6,15 +6,26 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="starter" />
         <module name="core" />
+        <module name="example-server" />
+        <module name="example-client" />
+        <module name="example-server-api" />
+        <module name="starter" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="example" target="1.8" />
+      <module name="server" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="MyRpc" options="-parameters" />
       <module name="core" options="" />
+      <module name="example" options="" />
+      <module name="example-server" options="" />
+      <module name="example-server-api" options="" />
+      <module name="server" options="" />
       <module name="starter" options="" />
     </option>
   </component>

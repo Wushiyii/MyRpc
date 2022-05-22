@@ -25,6 +25,9 @@
   <modules>
     <module>core</module>
     <module>starter</module>
+    <module>example-client</module>
+    <module>example-server</module>
+    <module>example-server-api</module>
   </modules>
 
   <build>

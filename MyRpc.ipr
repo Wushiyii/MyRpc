@@ -99,11 +99,11 @@ under the License.
     <modules> 
       <!-- module filepath="$$PROJECT_DIR$$/${pom.artifactId}.iml"/ -->  
       <module filepath="$PROJECT_DIR$/MyRpc.iml"/>
-      <module filepath="$PROJECT_DIR$/core/core.iml"/>
-      <module filepath="$PROJECT_DIR$/starter/starter.iml"/>
-      <module filepath="$PROJECT_DIR$/example-client/example-client.iml"/>
-      <module filepath="$PROJECT_DIR$/example-server/example-server.iml"/>
-      <module filepath="$PROJECT_DIR$/example-server-api/example-server-api.iml"/>
+      <module filepath="$PROJECT_DIR$/my-rpc-core/my-rpc-core.iml"/>
+      <module filepath="$PROJECT_DIR$/my-rpc-spring-boot-starter/my-rpc-spring-boot-starter.iml"/>
+      <module filepath="$PROJECT_DIR$/my-rpc-example-client/my-rpc-example-client.iml"/>
+      <module filepath="$PROJECT_DIR$/my-rpc-example-server/my-rpc-example-server.iml"/>
+      <module filepath="$PROJECT_DIR$/my-rpc-example-server-api/my-rpc-example-server-api.iml"/>
     </modules> 
   </component>  
   <UsedPathMacros> 

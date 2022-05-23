@@ -2,15 +2,16 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="core" />
-        <module name="example-server" />
-        <module name="example-client" />
-        <module name="example-server-api" />
-        <module name="starter" />
+        <module name="my-rpc-spring-boot-starter" />
+        <module name="my-rpc-example-server-api" />
+        <module name="my-rpc-example-client" />
+        <module name="my-rpc-core" />
+        <module name="my-rpc-example-server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -21,12 +22,12 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="MyRpc" options="-parameters" />
-      <module name="core" options="" />
       <module name="example" options="" />
-      <module name="example-server" options="" />
-      <module name="example-server-api" options="" />
+      <module name="my-rpc-core" options="" />
+      <module name="my-rpc-example-server" options="" />
+      <module name="my-rpc-example-server-api" options="" />
+      <module name="my-rpc-spring-boot-starter" options="" />
       <module name="server" options="" />
-      <module name="starter" options="" />
     </option>
   </component>
 </project>

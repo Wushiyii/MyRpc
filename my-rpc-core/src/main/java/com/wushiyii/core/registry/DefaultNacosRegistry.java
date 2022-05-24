@@ -1,5 +1,6 @@
 package com.wushiyii.core.registry;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingFactory;
 import com.alibaba.nacos.api.naming.NamingService;
@@ -49,10 +50,12 @@ public class DefaultNacosRegistry implements Registry {
         instance.setInstanceId(nodeInfo.getMethodName());
         instance.setMetadata(MapUtil.objectToMap(nodeInfo));
 
+        log.info("register nacos nameserver, serviceName={}, instance={}", nodeInfo.getMethodName(), instance);
         namingService.registerInstance(nodeInfo.getMethodName(), instance);
 
         namingService.subscribe(nodeInfo.getMethodName(), event -> {
             if (event instanceof NamingEvent) {
+                log.info("listened nacos naming event, event={}", JSON.toJSONString(event));
                 List<Instance> instances = ((NamingEvent) event).getInstances();
                 List<NodeInfo> nodeList = Optional.ofNullable(instances).orElse(new ArrayList<>())
                         .stream()

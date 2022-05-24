@@ -3,7 +3,7 @@ package com.wushiyii.core.model;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "MyRpc")
+@ConfigurationProperties(prefix = "my.rpc")
 @Data
 public class RpcConfig {
 

@@ -21,4 +21,9 @@ public class RpcAutoConfiguration {
         return new DefaultNacosRegistry(rpcConfig);
     }
 
+    @Bean
+    public ServerBootstrap CreateServerBootstrap(@Autowired RpcConfig rpcConfig, @Autowired Registry registry) throws NacosException {
+        return new ServerBootstrap(rpcConfig, registry);
+    }
+
 }

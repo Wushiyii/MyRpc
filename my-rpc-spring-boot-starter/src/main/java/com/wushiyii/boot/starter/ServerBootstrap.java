@@ -16,13 +16,16 @@ import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
-@Component
-public class ServerBooster implements ApplicationListener<ContextRefreshedEvent> {
+public class ServerBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
-    @Autowired
-    private RpcConfig rpcConfig;
-    @Autowired
-    private Registry registry;
+    private final RpcConfig rpcConfig;
+    private final Registry registry;
+
+    public ServerBootstrap(RpcConfig rpcConfig, Registry registry) {
+        this.rpcConfig = rpcConfig;
+        this.registry = registry;
+    }
+
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -51,7 +54,6 @@ public class ServerBooster implements ApplicationListener<ContextRefreshedEvent>
             methodInfo.setMethodName(name);
             methodInfo.setMethodClazz(clazz);
 
-            log.info("registerMethod, methodInfo={}", methodInfo);
             registry.registerMethod(methodInfo);
         });
         log.info("registerAllMethod stop, spend time={}", stopwatch.stop().elapsed());

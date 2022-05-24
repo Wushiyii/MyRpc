@@ -2,15 +2,14 @@ package com.wushiyii.boot.starter;
 
 import com.google.common.base.Stopwatch;
 import com.wushiyii.core.annotation.Provider;
-import com.wushiyii.core.model.RpcConfig;
 import com.wushiyii.core.model.MethodInfo;
+import com.wushiyii.core.model.RpcConfig;
+import com.wushiyii.core.netty.NettyServer;
 import com.wushiyii.core.registry.Registry;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.Objects;
@@ -61,7 +60,7 @@ public class ServerBootstrap implements ApplicationListener<ContextRefreshedEven
 
 
     private void startServer(ApplicationContext context) {
-
+        new Thread(() -> new NettyServer(rpcConfig).start()).start();
     }
 
 

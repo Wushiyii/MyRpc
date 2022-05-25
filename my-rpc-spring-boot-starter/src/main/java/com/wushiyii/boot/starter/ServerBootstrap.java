@@ -2,6 +2,7 @@ package com.wushiyii.boot.starter;
 
 import com.google.common.base.Stopwatch;
 import com.wushiyii.core.annotation.Provider;
+import com.wushiyii.core.cache.MethodInfoCache;
 import com.wushiyii.core.model.MethodInfo;
 import com.wushiyii.core.model.RpcConfig;
 import com.wushiyii.core.netty.NettyServer;
@@ -50,10 +51,11 @@ public class ServerBootstrap implements ApplicationListener<ContextRefreshedEven
             Class<?> clazz = bean.getClass();
 
             MethodInfo methodInfo = new MethodInfo();
-            methodInfo.setMethodName(name);
+            methodInfo.setMethodName(clazz.getName());
             methodInfo.setMethodClazz(clazz);
 
             registry.registerMethod(methodInfo);
+            MethodInfoCache.inject(clazz.getName(), methodInfo);
         });
         log.info("registerAllMethod stop, spend time={}", stopwatch.stop().elapsed());
     }

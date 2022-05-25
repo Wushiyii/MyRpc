@@ -46,7 +46,7 @@ public class NettyServer {
                             socketChannel.pipeline()
                                     .addLast(new MyRpcDecoder())
                                     .addLast(new MyRpcEncoder())
-                                    .addLast(new ServerProtocolHandler());
+                                    .addLast(new ServerProtocolHandler(rpcConfig));
                         }
                     });
 

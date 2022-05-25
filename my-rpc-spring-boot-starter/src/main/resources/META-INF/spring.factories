@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.wushiyii.boot.starter.RpcAutoConfiguration
+com.wushiyii.boot.starter.RpcServerAutoConfiguration,\
+com.wushiyii.boot.starter.RpcClientAutoConfiguration

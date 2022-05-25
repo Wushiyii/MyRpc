@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableConfigurationProperties({RpcConfig.class})
-public class RpcAutoConfiguration {
+public class RpcServerAutoConfiguration {
 
     @Autowired
     private RpcConfig rpcConfig;

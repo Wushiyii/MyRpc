@@ -16,7 +16,7 @@ public class ClientRequestHandler {
     }
 
 
-    public RpcResponse handle(RpcRequest request) {
-        return null;
+    public RpcResponse doRequest(RpcRequest request) {
+        return nettyClient.invokeSync(request);
     }
 }

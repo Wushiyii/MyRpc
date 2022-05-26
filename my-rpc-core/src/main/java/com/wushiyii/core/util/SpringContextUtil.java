@@ -4,15 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
 
 @Slf4j
-@Lazy(false)
-@Component
 public class SpringContextUtil implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext;

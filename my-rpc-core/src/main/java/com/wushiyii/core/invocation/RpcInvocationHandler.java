@@ -33,7 +33,7 @@ public class RpcInvocationHandler {
 
         //netty client send
         ClientRequestHandler requestHandler = ClientRequestHandlerMap.getHandler(selectNode);
-        return requestHandler.handle(request);
+        return requestHandler.doRequest(request);
     }
 
 

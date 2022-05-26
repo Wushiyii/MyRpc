@@ -27,4 +27,8 @@ public class NodeInfo {
         this.loadBalance = rpcConfig.getLoadBalance();
     }
 
+    public String toAddress() {
+        return this.getNodeIp() + ":" + this.getNodePort();
+    }
+
 }

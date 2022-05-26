@@ -60,6 +60,7 @@ public class RpcConsumerBean implements FactoryBean<Object> {
             request.setProviderName(providerInfo.getProviderName());
             request.setParameterTypes(method.getParameterTypes());
             request.setParameters(args);
+            request.setReturnType(method.getReturnType());
             request.setCommandId(UUID.randomUUID().toString());
 
             RpcResponse response = RpcInvocationHandler.invoke(request);

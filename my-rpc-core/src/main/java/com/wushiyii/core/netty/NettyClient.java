@@ -2,6 +2,8 @@ package com.wushiyii.core.netty;
 
 
 import com.wushiyii.core.model.NodeInfo;
+import com.wushiyii.core.model.RpcRequest;
+import com.wushiyii.core.model.RpcResponse;
 import com.wushiyii.core.netty.handler.ClientProtocolHandler;
 import com.wushiyii.core.netty.protocol.MyRpcDecoder;
 import com.wushiyii.core.netty.protocol.MyRpcEncoder;
@@ -22,9 +24,11 @@ import java.util.concurrent.TimeUnit;
 public class NettyClient {
 
     private final NodeInfo nodeInfo;
+    private final ClientProtocolHandler clientProtocolHandler;
 
     public NettyClient(NodeInfo nodeInfo) {
         this.nodeInfo = nodeInfo;
+        clientProtocolHandler = new ClientProtocolHandler(nodeInfo);
     }
 
     @SneakyThrows
@@ -59,7 +63,7 @@ public class NettyClient {
                         ChannelPipeline pipeline = socketChannel.pipeline();
                         pipeline.addLast(new MyRpcDecoder())
                                 .addLast(new MyRpcEncoder())
-                                .addLast(new ClientProtocolHandler(nodeInfo))
+                                .addLast(clientProtocolHandler)
                         ;
                     }
                 });
@@ -69,5 +73,10 @@ public class NettyClient {
             latch.countDown();
         });
 
+    }
+
+
+    public RpcResponse invokeSync(RpcRequest request) {
+        return clientProtocolHandler.invokeSync(request);
     }
 }

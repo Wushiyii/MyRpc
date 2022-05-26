@@ -46,7 +46,7 @@ public class RpcConsumerBean implements FactoryBean<Object> {
 
 
     private static class ClientInvocationHandler implements InvocationHandler {
-        private ProviderInfo providerInfo;
+        private final ProviderInfo providerInfo;
 
         public ClientInvocationHandler(ProviderInfo providerInfo) {
             this.providerInfo = providerInfo;
@@ -63,7 +63,9 @@ public class RpcConsumerBean implements FactoryBean<Object> {
             request.setCommandId(UUID.randomUUID().toString());
 
             RpcResponse response = RpcInvocationHandler.invoke(request);
-
+            if (Objects.isNull(response)) {
+                throw new RuntimeException("Rpc can not get response, request=" + request);
+            }
             if (Objects.nonNull(response.getEx())) {
                 throw new RuntimeException(response.getEx());
             }

@@ -6,6 +6,8 @@ import com.wushiyii.core.loadbalance.LoadBalanceUtil;
 import com.wushiyii.core.model.NodeInfo;
 import com.wushiyii.core.model.RpcRequest;
 import com.wushiyii.core.model.RpcResponse;
+import com.wushiyii.core.netty.ClientRequestHandlerMap;
+import com.wushiyii.core.netty.handler.ClientRequestHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
@@ -29,10 +31,9 @@ public class RpcInvocationHandler {
         //load balance
         NodeInfo selectNode = LoadBalanceUtil.select(nodeList);
 
-        //TODO netty client send
-        log.info("send data:{}, ip:{}, port{}", request, selectNode.getNodeIp(), selectNode.getNodePort());
-
-        return response;
+        //netty client send
+        ClientRequestHandler requestHandler = ClientRequestHandlerMap.getHandler(selectNode);
+        return requestHandler.handle(request);
     }
 
 

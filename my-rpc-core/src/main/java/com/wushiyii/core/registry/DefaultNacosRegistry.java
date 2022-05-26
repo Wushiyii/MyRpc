@@ -49,7 +49,6 @@ public class DefaultNacosRegistry implements Registry {
         Instance instance = new Instance();
         instance.setIp(nodeInfo.getNodeIp());
         instance.setPort(nodeInfo.getNodePort());
-        instance.setWeight(nodeInfo.getWeight());
         instance.setServiceName(nodeInfo.getServiceName());
         instance.setInstanceId(nodeInfo.getServiceName());
         instance.setMetadata(MapUtil.objectToMap(nodeInfo));

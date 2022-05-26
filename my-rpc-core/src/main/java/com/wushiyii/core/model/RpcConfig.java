@@ -15,6 +15,4 @@ public class RpcConfig {
 
     private String loadBalance = C.DEFAULT_LOAD_BALANCE;
 
-    private Double weight = C.DEFAULT_WEIGHT;
-
 }

@@ -3,10 +3,12 @@ package com.wushiyii.boot.starter;
 import com.google.common.base.Stopwatch;
 import com.wushiyii.core.annotation.Provider;
 import com.wushiyii.core.cache.ProviderInfoCache;
+import com.wushiyii.core.loadbalance.LoadBalanceUtil;
 import com.wushiyii.core.model.ProviderInfo;
 import com.wushiyii.core.model.RpcConfig;
 import com.wushiyii.core.netty.NettyServer;
 import com.wushiyii.core.registry.Registry;
+import com.wushiyii.core.serialize.SerializeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
@@ -33,6 +35,9 @@ public class ServerBootstrap implements ApplicationListener<ContextRefreshedEven
         //root容器初始化时才注册接口
         if(Objects.isNull(event.getApplicationContext().getParent())){
             ApplicationContext context = event.getApplicationContext();
+
+            //初始化各类工具 (序列化/负载均衡/容错 等)
+            initUtil(rpcConfig);
 
             //注册接口到注册中心
             registerAllProvider(context);
@@ -67,5 +72,10 @@ public class ServerBootstrap implements ApplicationListener<ContextRefreshedEven
         new Thread(() -> new NettyServer(rpcConfig).start()).start();
     }
 
+
+    private void initUtil(RpcConfig rpcConfig) {
+        SerializeUtil.init(rpcConfig);
+        LoadBalanceUtil.init(rpcConfig);
+    }
 
 }

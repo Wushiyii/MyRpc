@@ -1,33 +1,21 @@
 package com.wushiyii.core.serialize;
 
+import com.wushiyii.core.model.RpcConfig;
+
 public class SerializeUtil {
 
-    public static volatile SerializeUtil instance;
+    private static RpcSerializer rpcSerializer;
 
-    private final RpcSerializer rpcSerializer;
-
-    public SerializeUtil(String serializerName) {
-        this.rpcSerializer = SerializerFactory.getSerializerByName(serializerName);
-    }
-
-    public static SerializeUtil getInstance(String serializerName) {
-        if (null == instance) {
-            synchronized (SerializeUtil.class) {
-                if (null == instance) {
-                    instance = new SerializeUtil(serializerName);
-                }
-            }
-        }
-        return instance;
+    public static void init(RpcConfig rpcConfig) {
+        SerializeUtil.rpcSerializer = SerializerFactory.getSerializerByName(rpcConfig.getSerialize());
     }
 
 
-
-    public byte[] serialize(Object obj) {
+    public static byte[] serialize(Object obj) {
         return rpcSerializer.serializer(obj);
     }
 
-    public <T> T deserializer(byte[] content, Class<T> clazz){
+    public static  <T> T deserializer(byte[] content, Class<T> clazz){
         return rpcSerializer.deserializer(content, clazz);
     }
 

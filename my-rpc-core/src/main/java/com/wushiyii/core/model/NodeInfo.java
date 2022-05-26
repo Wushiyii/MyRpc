@@ -18,8 +18,6 @@ public class NodeInfo {
 
     private String loadBalance;
 
-    private Double weight;
-
     @SneakyThrows
     public NodeInfo(ProviderInfo providerInfo, RpcConfig rpcConfig) {
         this.serviceName = providerInfo.getProviderName();
@@ -27,7 +25,6 @@ public class NodeInfo {
         this.nodePort = rpcConfig.getRpcPort();
         this.serialize = rpcConfig.getSerialize();
         this.loadBalance = rpcConfig.getLoadBalance();
-        this.weight = rpcConfig.getWeight();
     }
 
 }

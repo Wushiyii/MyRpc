@@ -2,6 +2,7 @@ package com.wushiyii.core.invocation;
 
 
 import com.wushiyii.core.cache.NodeCache;
+import com.wushiyii.core.loadbalance.LoadBalanceUtil;
 import com.wushiyii.core.model.NodeInfo;
 import com.wushiyii.core.model.RpcRequest;
 import com.wushiyii.core.model.RpcResponse;
@@ -25,8 +26,8 @@ public class RpcInvocationHandler {
             throw new RuntimeException("No rpc provider:" + request.getProviderName() + "available");
         }
 
-        //TODO load balance
-        NodeInfo selectNode = nodeList.get(0);
+        //load balance
+        NodeInfo selectNode = LoadBalanceUtil.select(nodeList);
 
         //TODO netty client send
         log.info("send data:{}, ip:{}, port{}", request, selectNode.getNodeIp(), selectNode.getNodePort());

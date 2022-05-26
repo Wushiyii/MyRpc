@@ -15,12 +15,10 @@ public class ServerProtocolRunnable implements Runnable {
 
     private final ChannelHandlerContext ctx;
     private final MyRpcProtocol msg;
-    private final SerializeUtil serializeUtil;
 
     public ServerProtocolRunnable(ChannelHandlerContext ctx, Object msg, RpcConfig rpcConfig) {
         this.ctx = ctx;
         this.msg = (MyRpcProtocol) msg;
-        this.serializeUtil = SerializeUtil.getInstance(rpcConfig.getSerialize());
     }
 
 
@@ -29,13 +27,13 @@ public class ServerProtocolRunnable implements Runnable {
         try {
 
             //序列化rpc请求
-            RpcRequest rpcRequest = serializeUtil.deserializer(msg.getContent(), RpcRequest.class);
+            RpcRequest rpcRequest = SerializeUtil.deserializer(msg.getContent(), RpcRequest.class);
 
             //反射调用
             RpcResponse rpcResponse = invoke0(rpcRequest);
 
             //序列化rpc返回值
-            byte[] rpcResponseByte = serializeUtil.serialize(rpcResponse);
+            byte[] rpcResponseByte = SerializeUtil.serialize(rpcResponse);
             MyRpcProtocol responseProtocol = new MyRpcProtocol(C.RESPONSE_PROTOCOL_TYPE, rpcResponseByte);
 
             //channel写入返回值

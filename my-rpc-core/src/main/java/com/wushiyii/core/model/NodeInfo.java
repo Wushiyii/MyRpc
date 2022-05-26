@@ -8,7 +8,7 @@ import java.net.InetAddress;
 @Data
 public class NodeInfo {
 
-    private String methodName;
+    private String serviceName;
 
     private String nodeIp;
 
@@ -21,8 +21,8 @@ public class NodeInfo {
     private Double weight;
 
     @SneakyThrows
-    public NodeInfo(MethodInfo methodInfo, RpcConfig rpcConfig) {
-        this.methodName = methodInfo.getMethodName();
+    public NodeInfo(ProviderInfo providerInfo, RpcConfig rpcConfig) {
+        this.serviceName = providerInfo.getProviderName();
         this.nodeIp = InetAddress.getLocalHost().getHostAddress();
         this.nodePort = rpcConfig.getRpcPort();
         this.serialize = rpcConfig.getSerialize();

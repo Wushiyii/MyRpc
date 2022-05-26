@@ -1,6 +1,6 @@
 package com.wushiyii.core.netty.handler;
 
-import com.wushiyii.core.cache.MethodInfoCache;
+import com.wushiyii.core.cache.ProviderInfoCache;
 import com.wushiyii.core.model.*;
 import com.wushiyii.core.netty.protocol.MyRpcProtocol;
 import com.wushiyii.core.serialize.SerializeUtil;
@@ -49,9 +49,9 @@ public class ServerProtocolRunnable implements Runnable {
         RpcResponse rpcResponse = new RpcResponse();
 
         try {
-            MethodInfo methodInfo = MethodInfoCache.getByMethodName(rpcRequest.getMethodName());
-            Method method = methodInfo.getMethodClazz().getMethod(rpcRequest.getMethodName(), rpcRequest.getParameterTypes());
-            Object responseData = method.invoke(SpringContextUtil.getBeanOfType(methodInfo.getMethodClazz()), rpcRequest.getParameters());
+            ProviderInfo providerInfo = ProviderInfoCache.getByProviderName(rpcRequest.getProviderName());
+            Method method = providerInfo.getProviderClazz().getMethod(rpcRequest.getMethodName(), rpcRequest.getParameterTypes());
+            Object responseData = method.invoke(SpringContextUtil.getBeanOfType(providerInfo.getProviderClazz()), rpcRequest.getParameters());
 
             rpcResponse.setCommandId(rpcRequest.getCommandId());
             rpcResponse.setResponseData(responseData);

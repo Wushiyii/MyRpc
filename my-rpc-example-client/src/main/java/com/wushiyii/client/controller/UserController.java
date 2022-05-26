@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Objects;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -16,7 +18,8 @@ public class UserController {
 
     @GetMapping("getUserById")
     public UserDTO getUserById(Long userId) {
-        return userFacade.getUserById(userId);
+        UserDTO userDTO = userFacade.getUserById(userId);
+        return Objects.nonNull(userDTO) ? userDTO : new UserDTO("aaa", 123, userId);
     }
 
 }

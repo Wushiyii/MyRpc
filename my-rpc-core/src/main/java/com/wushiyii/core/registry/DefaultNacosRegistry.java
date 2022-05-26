@@ -7,9 +7,9 @@ import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.listener.NamingEvent;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.wushiyii.core.cache.NodeCache;
-import com.wushiyii.core.model.RpcConfig;
-import com.wushiyii.core.model.MethodInfo;
+import com.wushiyii.core.model.ProviderInfo;
 import com.wushiyii.core.model.NodeInfo;
+import com.wushiyii.core.model.RpcConfig;
 import com.wushiyii.core.util.MapUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 
 /**
@@ -31,39 +33,61 @@ public class DefaultNacosRegistry implements Registry {
     public DefaultNacosRegistry(RpcConfig rpcConfig) throws NacosException {
         this.rpcConfig = rpcConfig;
         this.namingService = NamingFactory.createNamingService(rpcConfig.getRegistryAddress());
+        NodeCache.init(this);
     }
+
+    private final Set<String> subscribeSet = new CopyOnWriteArraySet<>();
 
 
     @Override
     @SneakyThrows
-    public void registerMethod(MethodInfo methodInfo) {
-        log.info("registerMethod, methodInfo={}", methodInfo);
+    public void registerProvider(ProviderInfo providerInfo) {
+        log.info("registerProvider, providerInfo={}", providerInfo);
 
-        NodeInfo nodeInfo = new NodeInfo(methodInfo, rpcConfig);
+        NodeInfo nodeInfo = new NodeInfo(providerInfo, rpcConfig);
 
         Instance instance = new Instance();
         instance.setIp(nodeInfo.getNodeIp());
         instance.setPort(nodeInfo.getNodePort());
-        instance.setHealthy(false);
         instance.setWeight(nodeInfo.getWeight());
-        instance.setServiceName(nodeInfo.getMethodName());
-        instance.setInstanceId(nodeInfo.getMethodName());
+        instance.setServiceName(nodeInfo.getServiceName());
+        instance.setInstanceId(nodeInfo.getServiceName());
         instance.setMetadata(MapUtil.objectToMap(nodeInfo));
 
-        log.info("register nacos nameserver, serviceName={}, instance={}", nodeInfo.getMethodName(), instance);
-        namingService.registerInstance(nodeInfo.getMethodName(), instance);
+        log.info("register nacos nameserver, serviceName={}, instance={}", nodeInfo.getServiceName(), instance);
+        namingService.registerInstance(nodeInfo.getServiceName(), instance);
+    }
 
-        namingService.subscribe(nodeInfo.getMethodName(), event -> {
-            if (event instanceof NamingEvent) {
-                log.info("listened nacos naming event, event={}", JSON.toJSONString(event));
-                List<Instance> instances = ((NamingEvent) event).getInstances();
-                List<NodeInfo> nodeList = Optional.ofNullable(instances).orElse(new ArrayList<>())
-                        .stream()
-                        .map(ins -> MapUtil.mapToObject(ins.getMetadata(), NodeInfo.class))
-                        .collect(Collectors.toList());
-                NodeCache.putNodeList(nodeInfo.getMethodName(), nodeList);
-            }
+    @SneakyThrows
+    @Override
+    public void subscribeProvider(String providerName) {
+        if (!subscribeSet.contains(providerName)) {
+            subscribeSet.add(providerName);
 
-        });
+            namingService.subscribe(providerName, event -> {
+                if (event instanceof NamingEvent) {
+                    log.info("listened nacos naming event, event={}", JSON.toJSONString(event));
+                    List<Instance> instances = ((NamingEvent) event).getInstances();
+                    List<NodeInfo> nodeList = Optional.ofNullable(instances).orElse(new ArrayList<>())
+                            .stream()
+                            .map(ins -> MapUtil.mapToObject(ins.getMetadata(), NodeInfo.class))
+                            .collect(Collectors.toList());
+                    NodeCache.putNodeList(providerName, nodeList);
+                }
+            });
+        }
+
+    }
+
+    @SneakyThrows
+    @Override
+    public List<NodeInfo> getNodeListByProviderName(String providerName) {
+        log.info("getNodeListByProviderName providerName={}", providerName);
+        List<Instance> instances = namingService.selectInstances(providerName, true);
+        List<NodeInfo> nodeList = Optional.ofNullable(instances).orElse(new ArrayList<>())
+                .stream()
+                .map(ins -> MapUtil.mapToObject(ins.getMetadata(), NodeInfo.class))
+                .collect(Collectors.toList());
+        return nodeList;
     }
 }

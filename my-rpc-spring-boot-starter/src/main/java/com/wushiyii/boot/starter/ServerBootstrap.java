@@ -2,8 +2,8 @@ package com.wushiyii.boot.starter;
 
 import com.google.common.base.Stopwatch;
 import com.wushiyii.core.annotation.Provider;
-import com.wushiyii.core.cache.MethodInfoCache;
-import com.wushiyii.core.model.MethodInfo;
+import com.wushiyii.core.cache.ProviderInfoCache;
+import com.wushiyii.core.model.ProviderInfo;
 import com.wushiyii.core.model.RpcConfig;
 import com.wushiyii.core.netty.NettyServer;
 import com.wushiyii.core.registry.Registry;
@@ -35,29 +35,31 @@ public class ServerBootstrap implements ApplicationListener<ContextRefreshedEven
             ApplicationContext context = event.getApplicationContext();
 
             //注册接口到注册中心
-            registerAllMethod(context);
+            registerAllProvider(context);
 
             //启动服务器
             startServer(context);
         }
     }
 
-    private void registerAllMethod(ApplicationContext context) {
-        log.info("registerAllMethod start ");
+    private void registerAllProvider(ApplicationContext context) {
+        log.info("registerAllProvider start ");
         Stopwatch stopwatch = Stopwatch.createStarted();
         Map<String, Object> beansMap = context.getBeansWithAnnotation(Provider.class);
 
         beansMap.forEach((name, bean) -> {
             Class<?> clazz = bean.getClass();
 
-            MethodInfo methodInfo = new MethodInfo();
-            methodInfo.setMethodName(clazz.getName());
-            methodInfo.setMethodClazz(clazz);
+            Class<?> interfaceClazz = bean.getClass().getInterfaces()[0];
+            String providerName = interfaceClazz.getName();
+            ProviderInfo providerInfo = new ProviderInfo();
+            providerInfo.setProviderName(providerName);
+            providerInfo.setProviderClazz(clazz);
 
-            registry.registerMethod(methodInfo);
-            MethodInfoCache.inject(clazz.getName(), methodInfo);
+            registry.registerProvider(providerInfo);
+            ProviderInfoCache.inject(providerName, providerInfo);
         });
-        log.info("registerAllMethod stop, spend time={}", stopwatch.stop().elapsed());
+        log.info("registerAllProvider stop, spend time={}", stopwatch.stop().elapsed());
     }
 
 

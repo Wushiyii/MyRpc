@@ -2,6 +2,7 @@ package com.wushiyii.core.netty;
 
 
 import com.wushiyii.core.model.NodeInfo;
+import com.wushiyii.core.netty.handler.ClientProtocolHandler;
 import com.wushiyii.core.netty.protocol.MyRpcDecoder;
 import com.wushiyii.core.netty.protocol.MyRpcEncoder;
 import io.netty.bootstrap.Bootstrap;
@@ -57,7 +58,9 @@ public class NettyClient {
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         ChannelPipeline pipeline = socketChannel.pipeline();
                         pipeline.addLast(new MyRpcDecoder())
-                                .addLast(new MyRpcEncoder());
+                                .addLast(new MyRpcEncoder())
+                                .addLast(new ClientProtocolHandler(nodeInfo))
+                        ;
                     }
                 });
 

@@ -1,6 +1,7 @@
 package com.wushiyii.core.model;
 
 import com.wushiyii.core.invocation.RpcInvocationHandler;
+import com.wushiyii.core.serialize.SerializeUtil;
 import org.springframework.beans.factory.FactoryBean;
 
 import java.lang.reflect.InvocationHandler;
@@ -60,7 +61,6 @@ public class RpcConsumerBean implements FactoryBean<Object> {
             request.setProviderName(providerInfo.getProviderName());
             request.setParameterTypes(method.getParameterTypes());
             request.setParameters(args);
-            request.setReturnType(method.getReturnType());
             request.setCommandId(UUID.randomUUID().toString());
 
             RpcResponse response = RpcInvocationHandler.invoke(request);
@@ -71,7 +71,7 @@ public class RpcConsumerBean implements FactoryBean<Object> {
                 throw new RuntimeException(response.getEx());
             }
 
-            return response.getResponseData();
+            return SerializeUtil.deserializer(SerializeUtil.serialize(response.getResponseData()),method.getReturnType());
         }
     }
 }

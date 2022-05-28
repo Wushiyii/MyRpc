@@ -1,15 +1,30 @@
 package com.wushiyii.core.serialize.impl;
 
 import com.wushiyii.core.serialize.RpcSerializer;
+import lombok.SneakyThrows;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class JavaSerializer implements RpcSerializer {
+
+    @SneakyThrows
     @Override
     public byte[] serializer(Object obj) {
-        return new byte[0];
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream out = new ObjectOutputStream(bos);
+        out.writeObject(obj);
+        return bos.toByteArray();
     }
 
+    @SneakyThrows
     @Override
     public <T> T deserializer(byte[] content, Class<T> clazz) {
-        return null;
+
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(content);
+        ObjectInputStream inputStream = new ObjectInputStream(byteArrayInputStream);
+        return (T)inputStream.readObject();
     }
 }

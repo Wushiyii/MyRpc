@@ -40,7 +40,6 @@ public class ClientProtocolHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         MyRpcProtocol responseMsg = (MyRpcProtocol) msg;
         RpcResponse rpcResponse = SerializeUtil.deserializer(responseMsg.getContent(), RpcResponse.class);
-        rpcResponse.setResponseData(SerializeUtil.deserializer(responseMsg.getContent(), RpcResponse.class));
         CompletableFuture<RpcResponse> holdFuture = holdMap.get(rpcResponse.getCommandId());
         if (Objects.nonNull(holdFuture)) {
             holdFuture.complete(rpcResponse);

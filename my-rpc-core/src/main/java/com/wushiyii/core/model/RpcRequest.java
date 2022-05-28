@@ -2,8 +2,10 @@ package com.wushiyii.core.model;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class RpcRequest {
+public class RpcRequest implements Serializable {
 
     private String commandId;
 
@@ -14,6 +16,4 @@ public class RpcRequest {
     private Class<?>[] parameterTypes;
 
     private Object[] parameters;
-
-    private Class<?> returnType;
 }

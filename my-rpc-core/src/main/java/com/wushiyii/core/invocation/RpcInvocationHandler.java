@@ -18,9 +18,7 @@ public class RpcInvocationHandler {
 
 
     public static RpcResponse invoke(RpcRequest request) {
-
-        RpcResponse response = new RpcResponse();
-        response.setCommandId(request.getCommandId());
+        log.info("RpcInvocationHandler doInvoke, request={}", request);
 
         List<NodeInfo> nodeList = NodeCache.getNodeListByProviderName(request.getProviderName());
         if (CollectionUtils.isEmpty(nodeList)) {
@@ -33,6 +31,7 @@ public class RpcInvocationHandler {
 
         //netty client send
         ClientRequestHandler requestHandler = ClientRequestHandlerMap.getHandler(selectNode);
+
         return requestHandler.doRequest(request);
     }
 

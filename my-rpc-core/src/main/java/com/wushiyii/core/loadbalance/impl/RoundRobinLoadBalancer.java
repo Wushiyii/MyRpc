@@ -4,12 +4,18 @@ import com.wushiyii.core.loadbalance.LoadBalancer;
 import com.wushiyii.core.model.NodeInfo;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class RoundRobinLoadBalancer implements LoadBalancer {
 
+    private final int MASK = 0x7FFFFFFF; // avoid negative
+    private final AtomicInteger atomicInteger = new AtomicInteger(0);
+
     @Override
     public NodeInfo select(List<NodeInfo> nodeList) {
-        return null;
+
+        int index = (atomicInteger.getAndIncrement() & MASK) % nodeList.size();
+        return nodeList.get(index);
     }
 }

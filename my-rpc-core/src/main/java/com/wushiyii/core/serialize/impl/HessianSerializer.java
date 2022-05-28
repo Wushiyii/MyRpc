@@ -1,15 +1,30 @@
 package com.wushiyii.core.serialize.impl;
 
+import com.caucho.hessian.io.HessianInput;
+import com.caucho.hessian.io.HessianOutput;
 import com.wushiyii.core.serialize.RpcSerializer;
+import lombok.SneakyThrows;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 public class HessianSerializer implements RpcSerializer {
+
+    @SneakyThrows
     @Override
     public byte[] serializer(Object obj) {
-        return new byte[0];
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        HessianOutput hessianOutput = new HessianOutput(bos);
+        hessianOutput.writeObject(obj);
+        return bos.toByteArray();
     }
 
+    @SneakyThrows
     @Override
     public <T> T deserializer(byte[] content, Class<T> clazz) {
-        return null;
+        ByteArrayInputStream bis = new ByteArrayInputStream(content);
+        HessianInput hessianInput = new HessianInput(bis);
+
+        return (T) hessianInput.readObject(clazz);
     }
 }

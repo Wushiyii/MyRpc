@@ -6,7 +6,7 @@ import com.wushiyii.core.model.NodeInfo;
 import com.wushiyii.core.model.RpcRequest;
 import com.wushiyii.core.model.RpcResponse;
 import com.wushiyii.core.netty.ClientRequestHandlerMap;
-import com.wushiyii.core.netty.protocol.MyRpcProtocol;
+import com.wushiyii.core.model.MyRpcProtocol;
 import com.wushiyii.core.serialize.SerializeUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

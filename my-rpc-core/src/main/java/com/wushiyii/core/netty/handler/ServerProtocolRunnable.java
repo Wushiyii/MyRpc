@@ -2,7 +2,7 @@ package com.wushiyii.core.netty.handler;
 
 import com.wushiyii.core.cache.ProviderInfoCache;
 import com.wushiyii.core.model.*;
-import com.wushiyii.core.netty.protocol.MyRpcProtocol;
+import com.wushiyii.core.model.MyRpcProtocol;
 import com.wushiyii.core.serialize.SerializeUtil;
 import com.wushiyii.core.util.SpringContextUtil;
 import io.netty.channel.ChannelHandlerContext;

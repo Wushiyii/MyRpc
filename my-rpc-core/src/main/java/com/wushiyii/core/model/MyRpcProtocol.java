@@ -1,4 +1,4 @@
-package com.wushiyii.core.netty.protocol;
+package com.wushiyii.core.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface LoadBalancer {
 
+    String type();
+
     NodeInfo select(List<NodeInfo> nodeList);
 
 }

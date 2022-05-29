@@ -1,6 +1,7 @@
 package com.wushiyii.core.serialize.impl;
 
 import com.wushiyii.core.serialize.RpcSerializer;
+import com.wushiyii.core.serialize.SerializeType;
 import lombok.SneakyThrows;
 
 import java.io.ByteArrayInputStream;
@@ -9,6 +10,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class JavaSerializer implements RpcSerializer {
+
+    @Override
+    public String type() {
+        return SerializeType.JAVA;
+    }
 
     @SneakyThrows
     @Override

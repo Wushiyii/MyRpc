@@ -1,5 +1,6 @@
 package com.wushiyii.core.loadbalance.impl;
 
+import com.wushiyii.core.loadbalance.LoadBalanceType;
 import com.wushiyii.core.loadbalance.LoadBalancer;
 import com.wushiyii.core.model.NodeInfo;
 
@@ -11,6 +12,11 @@ public class RoundRobinLoadBalancer implements LoadBalancer {
 
     private final int MASK = 0x7FFFFFFF; // avoid negative
     private final AtomicInteger atomicInteger = new AtomicInteger(0);
+
+    @Override
+    public String type() {
+        return LoadBalanceType.ROUND_ROBIN;
+    }
 
     @Override
     public NodeInfo select(List<NodeInfo> nodeList) {

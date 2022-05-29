@@ -3,12 +3,18 @@ package com.wushiyii.core.serialize.impl;
 import com.caucho.hessian.io.HessianInput;
 import com.caucho.hessian.io.HessianOutput;
 import com.wushiyii.core.serialize.RpcSerializer;
+import com.wushiyii.core.serialize.SerializeType;
 import lombok.SneakyThrows;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 public class HessianSerializer implements RpcSerializer {
+
+    @Override
+    public String type() {
+        return SerializeType.HESSIAN;
+    }
 
     @SneakyThrows
     @Override

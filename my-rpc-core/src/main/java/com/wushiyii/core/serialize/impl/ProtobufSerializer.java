@@ -5,8 +5,14 @@ import com.dyuproject.protostuff.ProtobufIOUtil;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 import com.wushiyii.core.serialize.RpcSerializer;
+import com.wushiyii.core.serialize.SerializeType;
 
 public class ProtobufSerializer implements RpcSerializer {
+
+    @Override
+    public String type() {
+        return SerializeType.PROTOBUF;
+    }
 
     @Override
     public byte[] serializer(Object obj) {

@@ -1,5 +1,6 @@
 package com.wushiyii.core.loadbalance.impl;
 
+import com.wushiyii.core.loadbalance.LoadBalanceType;
 import com.wushiyii.core.loadbalance.LoadBalancer;
 import com.wushiyii.core.model.NodeInfo;
 
@@ -10,6 +11,11 @@ public class RandomLoadBalancer implements LoadBalancer {
 
     private final Random random = new Random();
 
+
+    @Override
+    public String type() {
+        return LoadBalanceType.RANDOM;
+    }
 
     @Override
     public NodeInfo select(List<NodeInfo> nodeList) {

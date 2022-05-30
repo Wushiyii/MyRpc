@@ -1,6 +1,7 @@
 package com.wushiyii.core.netty;
 
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.wushiyii.core.model.RpcConfig;
 import com.wushiyii.core.netty.handler.ServerProtocolHandler;
 import com.wushiyii.core.netty.protocol.MyRpcDecoder;
@@ -15,15 +16,20 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleStateHandler;
+import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class NettyServer {
 
     private final RpcConfig rpcConfig;
+    private final DefaultEventExecutorGroup defaultEventExecutorGroup;
 
     public NettyServer(RpcConfig rpcConfig) {
         this.rpcConfig = rpcConfig;
+        this.defaultEventExecutorGroup = new DefaultEventExecutorGroup(4,
+                new ThreadFactoryBuilder().setNameFormat("MyRpc-Server-Worker-%d").build());
     }
 
 
@@ -36,7 +42,9 @@ public class NettyServer {
             ServerBootstrap bootstrap = new ServerBootstrap()
                     .group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
+                    .option(ChannelOption.SO_KEEPALIVE, false)
                     .option(ChannelOption.SO_BACKLOG, 1024)
+                    .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 3000)
                     .option(ChannelOption.TCP_NODELAY, true)
                     .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(new ChannelInitializer<SocketChannel>() {
@@ -44,9 +52,11 @@ public class NettyServer {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             socketChannel.pipeline()
-                                    .addLast(new MyRpcDecoder())
-                                    .addLast(new MyRpcEncoder())
-                                    .addLast(new ServerProtocolHandler(rpcConfig));
+                                    .addLast(defaultEventExecutorGroup,
+                                            new MyRpcDecoder(),
+                                            new MyRpcEncoder(),
+                                            new IdleStateHandler(0, 0, 120),
+                                            new ServerProtocolHandler(rpcConfig));
                         }
                     });
 

@@ -29,6 +29,7 @@ public class NettyClient {
     public NettyClient(NodeInfo nodeInfo) {
         this.nodeInfo = nodeInfo;
         clientProtocolHandler = new ClientProtocolHandler(nodeInfo);
+        start();
     }
 
     @SneakyThrows

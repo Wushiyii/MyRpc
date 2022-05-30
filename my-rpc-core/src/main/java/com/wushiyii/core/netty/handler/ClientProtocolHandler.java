@@ -1,12 +1,8 @@
 package com.wushiyii.core.netty.handler;
 
 
-import com.wushiyii.core.model.C;
-import com.wushiyii.core.model.NodeInfo;
-import com.wushiyii.core.model.RpcRequest;
-import com.wushiyii.core.model.RpcResponse;
-import com.wushiyii.core.netty.ClientRequestHandlerMap;
-import com.wushiyii.core.model.MyRpcProtocol;
+import com.wushiyii.core.invocation.RpcInvocationHandler;
+import com.wushiyii.core.model.*;
 import com.wushiyii.core.serialize.SerializeUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -50,13 +46,13 @@ public class ClientProtocolHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         log.error("channel error, address={}", nodeInfo.toAddress(), cause);
-        ClientRequestHandlerMap.invalidChannel(nodeInfo.toAddress());
+        RpcInvocationHandler.invalidChannel(nodeInfo.toAddress());
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         log.error("channel inactive , address={}", nodeInfo.toAddress());
-        ClientRequestHandlerMap.invalidChannel(nodeInfo.toAddress());
+        RpcInvocationHandler.invalidChannel(nodeInfo.toAddress());
     }
 
     @Override

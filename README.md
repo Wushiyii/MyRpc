@@ -8,7 +8,7 @@ MyRpc是一个基于Netty、Nacos、Protobuf实现的简单易懂的RPC框架。
 - 基于Netty实现TCP交互（基于长度解析）
 - 负载均衡实现了随机、轮询算法
 - 序列化、负载均衡支持SPI实现
-- TCP报文协议清亮、易实现
+- TCP报文协议简单、易实现
 
 ### Example
 依赖：

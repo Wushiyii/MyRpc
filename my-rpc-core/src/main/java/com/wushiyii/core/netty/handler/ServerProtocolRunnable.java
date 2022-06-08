@@ -36,7 +36,7 @@ public class ServerProtocolRunnable implements Runnable {
             byte[] rpcResponseByte = SerializeUtil.serialize(rpcResponse);
 
             //组装返回值
-            MyRpcProtocol responseProtocol = new MyRpcProtocol(C.RESPONSE_PROTOCOL_TYPE, rpcResponseByte);
+            MyRpcProtocol responseProtocol = new MyRpcProtocol(rpcResponseByte);
 
             //channel写入返回值
             ctx.writeAndFlush(responseProtocol);

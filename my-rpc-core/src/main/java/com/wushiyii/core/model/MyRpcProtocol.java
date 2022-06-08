@@ -8,11 +8,6 @@ import lombok.Data;
 public class MyRpcProtocol {
 
     /**
-     * 协议请求类型
-     */
-    private byte protocolType;
-
-    /**
      * 协议报文
      */
     private byte[] content;

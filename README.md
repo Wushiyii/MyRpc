@@ -171,6 +171,39 @@ private static class ClientInvocationHandler implements InvocationHandler {
 }
 ```
 
+
+- 报文设计与解码器
+
+报文协议很简单，仅由2字节的长度字段与内容字段组成，长度字段代表内容字段总长度。
+入下文: 00 0c为长度(12), 后续在解析12个长度即为报文内容(HELLO, WORLD)
+
+ +-------------------------------------------------+----------------+
+ | 00 0c 48 45 4c 4c 4f 2c 20 57 4f 52 4c 44       |..HELLO, WORLD  |
+ +-------------------------------------------------+----------------+
+
+解码器使用:`LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 2, 0, 2)`
+自动根据长度字段解码，并去除无用长度字段，解码后组装协议对象
+```java
+public class MyRpcDecoder extends LengthFieldBasedFrameDecoder {
+
+    public MyRpcDecoder() {
+        super(Integer.MAX_VALUE, 0, 2, 0, 2);
+    }
+
+    @Override
+    protected Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
+        ByteBuf msg = (ByteBuf) super.decode(ctx, in);
+
+        byte[] bytes = new byte[msg.readableBytes()];
+
+        msg.readBytes(bytes);
+
+        return new MyRpcProtocol(bytes);
+    }
+}
+```
+
+
 - TCP交互实现
 
 通过`Netty`实现同步调用，`CompletableFuture`实现同步调用。
@@ -184,7 +217,7 @@ public RpcResponse invokeSync(RpcRequest request) {
 
         //序列化
         byte[] byteRequest = SerializeUtil.serialize(request);
-        MyRpcProtocol protocol = new MyRpcProtocol(C.REQUEST_PROTOCOL_TYPE, byteRequest);
+        MyRpcProtocol protocol = new MyRpcProtocol(byteRequest);
         ctx.writeAndFlush(protocol);
 
         //CompletableFuture阻塞请求

@@ -72,7 +72,7 @@ public class ClientProtocolHandler extends ChannelInboundHandlerAdapter {
 
             //序列化
             byte[] byteRequest = SerializeUtil.serialize(request);
-            MyRpcProtocol protocol = new MyRpcProtocol(C.REQUEST_PROTOCOL_TYPE, byteRequest);
+            MyRpcProtocol protocol = new MyRpcProtocol(byteRequest);
             ctx.writeAndFlush(protocol);
 
             //CompletableFuture阻塞请求

@@ -1,6 +1,5 @@
 package com.wushiyii.core.netty.protocol;
 
-import com.wushiyii.core.model.C;
 import com.wushiyii.core.model.MyRpcProtocol;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -10,14 +9,12 @@ public class MyRpcEncoder extends MessageToByteEncoder<MyRpcProtocol> {
 
 
     /**
-     * magic + type + length + content
+     *  length + content (4字节标识content报文长度)
      */
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, MyRpcProtocol myRpcProtocol, ByteBuf byteBuf) throws Exception {
 
-        byteBuf.writeByte(C.PROTOCOL_MAGIC_CODE);
-        byteBuf.writeByte(myRpcProtocol.getProtocolType());
-        byteBuf.writeInt(myRpcProtocol.getContent().length);
+        byteBuf.writeShort(myRpcProtocol.getContent().length);
         byteBuf.writeBytes(myRpcProtocol.getContent());
     }
 

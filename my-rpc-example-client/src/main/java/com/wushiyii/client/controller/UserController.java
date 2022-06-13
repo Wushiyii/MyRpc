@@ -4,6 +4,8 @@ import com.wushiyii.core.annotation.Consumer;
 import com.wushiyii.server.api.dto.UserDTO;
 import com.wushiyii.server.api.facade.IUserFacade;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,6 +19,11 @@ public class UserController {
     @GetMapping("getUserById")
     public UserDTO getUserById(Long userId) {
         return userFacade.getUserById(userId);
+    }
+
+    @PostMapping("createUser")
+    public UserDTO createUser(@RequestBody UserDTO dto) {
+        return userFacade.createUser(dto);
     }
 
 }

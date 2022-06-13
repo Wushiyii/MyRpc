@@ -7,4 +7,6 @@ public interface IUserFacade {
 
     UserDTO getUserById(Long id);
 
+    UserDTO createUser(UserDTO dto);
+
 }

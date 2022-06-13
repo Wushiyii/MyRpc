@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class RoundRobinLoadBalancer implements LoadBalancer {
 
-    private final int MASK = 0x7FFFFFFF; // avoid negative
+    private static final int MASK = 0x7FFFFFFF; // avoid negative
     private final AtomicInteger atomicInteger = new AtomicInteger(0);
 
     @Override

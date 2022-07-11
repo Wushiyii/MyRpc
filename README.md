@@ -176,11 +176,11 @@ private static class ClientInvocationHandler implements InvocationHandler {
 
 报文协议很简单，仅由2字节的长度字段与内容字段组成，长度字段代表内容字段总长度。
 入下文: 00 0c为长度(12), 后续在解析12个长度即为报文内容(HELLO, WORLD)
-
+```
  +-------------------------------------------------+----------------+
  | 00 0c 48 45 4c 4c 4f 2c 20 57 4f 52 4c 44       |..HELLO, WORLD  |
  +-------------------------------------------------+----------------+
-
+```
 解码器使用:`LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 2, 0, 2)`
 自动根据长度字段解码，并去除无用长度字段，解码后组装协议对象
 ```java

@@ -6,7 +6,7 @@ MyRpc是一个基于Netty、Nacos、Protobuf实现的简单易懂的RPC框架。
 - 使用Nacos作为注册中心
 - 多种序列化方式（Protobuf、Hessian、Jdk Serializer）
 - 基于Netty实现TCP交互（基于长度解析）
-- 负载均衡实现了随机、轮询算法
+- 负载均衡实现随机、轮询算法
 - 序列化、负载均衡支持SPI实现
 - TCP报文协议简单、易实现
 
